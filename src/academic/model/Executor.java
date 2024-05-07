@@ -12,6 +12,7 @@ public class Executor {
     ArrayList<Enrollment> listEnrollment = new ArrayList<Enrollment>();
     ArrayList<CourseOpening> listCourseOpening = new ArrayList<CourseOpening>();
     ArrayList<String> listBestStudent = new ArrayList<String>();
+
     
     public Executor() {
 
@@ -270,14 +271,59 @@ public class Executor {
 
 // FIND BEST STUDENT
     public void CtrlFindBest(String[] data) {
-        
-        for(var enr : listEnrollment){
-            if(enr.getYear().equals(data[1]) && enr.getTerm().equals(data[2])){
+        ArrayList<Enrollment> tempEnr = new ArrayList<Enrollment>();
+        StringBuilder output = new StringBuilder();
 
+        // ODD
+        for(var enr : listEnrollment){
+            if(enr.getYear().equals(data[1]) && enr.getTerm().equals("odd")){
+                tempEnr.add(enr);
             }
         }
-        
+        Collections.sort(tempEnr, Comparator.comparing(Enrollment::getGradeStd));
 
+        byte digit = 0;
+        if(tempEnr.size() == 1){
+            output.append(tempEnr.get(1).getStdId() + "|" + tempEnr.get(1).getGradeStd());
+        }else{
+            for(var enr : tempEnr){
+                digit = Byte.parseByte(enr.getStdId().substring(6,8));
+                // System.out.println(digit);
+                if(digit % 2 == 0){
+                    output.append(enr.getStdId() + "|" + enr.getGradeStd());
+                    break;
+                }else{
+                    continue;
+                }
+            }
+        }
+
+        tempEnr.removeAll(tempEnr);
+
+        // EVEN
+        for(var enr : listEnrollment){
+            if(enr.getYear().equals(data[1]) && enr.getTerm().equals("even"))
+                tempEnr.add(enr);
+        }
+        Collections.sort(tempEnr, Comparator.comparing(Enrollment::getGradeStd));
+
+        digit = 0;
+        if(tempEnr.size() == 1){
+            output.append("/" + tempEnr.get(1).getGradeStd());
+        }else{
+            for(var enr : tempEnr){
+                digit = Byte.parseByte(enr.getStdId().substring(6,8));
+                // System.out.println(digit);
+                if(digit % 2 == 0){
+                    output.append("/" + enr.getGradeStd());
+                    break;
+                }else{
+                    continue;
+                }
+            }
+        }
+
+        listBestStudent.add(output.toString());
     }
 
 // ADD BEST STUDENT
@@ -293,14 +339,13 @@ public class Executor {
         Generic.printList(this.listCourse);
         Generic.printList(this.listStudent);
         printListEnroll(this.listEnrollment);
-        // printBestStd();
+        printBestStd(this.listBestStudent);
     }
 
-    public void printBestStd(){
+    public void printBestStd(ArrayList<String> listBestStudent){
         for(var list : listBestStudent){
             System.out.println(list.toString());
         }
-       
     }
 
 }
