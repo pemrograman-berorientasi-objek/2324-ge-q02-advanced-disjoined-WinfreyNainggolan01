@@ -49,9 +49,6 @@ public class Driver1 {
                         case "course-history":
                             ExeElement.CtrlCourseH(data);
                             break;
-                        case "student-transcript":
-                            ExeElement.CtrlStudentT(data);
-                            break;
                         case "find-the-best-student":
                             
                             break;

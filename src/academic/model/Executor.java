@@ -3,37 +3,49 @@ package academic.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Optional;
 
-/**
- * @author 12S22001 Winfrey Nainggolan
- * @author 12S22012 Reinhard Batubara
- */
+
 public class Executor {
-     ArrayList<Student> listStudent = new ArrayList<Student>();
+    ArrayList<Student> listStudent = new ArrayList<Student>();
     ArrayList<Lecturer> listLecturer = new ArrayList<Lecturer>();
     ArrayList<Course> listCourse = new ArrayList<Course>();
     ArrayList<Enrollment> listEnrollment = new ArrayList<Enrollment>();
     ArrayList<CourseOpening> listCourseOpening = new ArrayList<CourseOpening>();
-
     
     public Executor() {
-        
+
     }
 
 
 // STUDENT
+    public boolean isStudentExist(ArrayList<Student> listStudent, String NIM) {
+        for (Student student : listStudent) {
+            if (student.getId().equals(NIM))  {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void CtrlStudent(String data[]) {
-        if(!Generic.isExist(listStudent, data[1])) {
+        if(!isStudentExist(listStudent, data[1])) {
             this.listStudent.add(new Student(data[1], data[2], data[3], data[4]));
         }
-
     }
 
 
 // LECTURER
+    public boolean isLecturerExist(ArrayList<Lecturer> listLecturer, String NIDN) {
+        for (Lecturer lecturer : listLecturer) {
+            if (lecturer.getId().equals(NIDN)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void CtrlLecturer(String[] data) {
-        if(!Generic.isExist(listLecturer, data[1])){
+        if(!isLecturerExist(listLecturer, data[1])) {
             this.listLecturer.add(new Lecturer(data[1], data[2], data[3], data[4], data[5]));
         }
     }
@@ -87,14 +99,29 @@ public class Executor {
         listEnrollment.add(enrollment);
     }
 
-    public void printListEnroll(ArrayList<Enrollment> listEnr) {
-        
-        listEnr.forEach(enrollment -> 
-        Optional.ofNullable(enrollment.getRemedial())
-        .ifPresentOrElse(remedial -> System.out.println(enrollment.toStringDetail()), ()-> System.out.println(enrollment)));
-
+    public void printListEnroll(ArrayList<Enrollment> listEnrollment) {
+        for (Enrollment enrollment : listEnrollment) {
+            if(enrollment.getRemedial() != null) {
+                System.out.println(enrollment.toStringDetail());
+            }else {
+                System.out.println(enrollment);
+            }
+        }
     }
 
+    public void printDetailStd(ArrayList<Student> listStudent, boolean empty, String[] data, double result, int sumSks) {
+        for (int i = 0; i < listStudent.size(); i++) {
+            if(data[1].equals(listStudent.get(i).getId())) {
+                if(!empty) {
+                    listStudent.get(i).setGpa(result);
+                    listStudent.get(i).setSks(sumSks);
+                    System.out.println(listStudent.get(i).toStringDetail()); 
+                }else {
+                    System.out.println(listStudent.get(i).toStringDetail()); 
+                }
+            }
+        }
+    }
 
 
 // ENROLLMENT GRADE
@@ -110,15 +137,8 @@ public class Executor {
 
 // STUDENT DETAILS
     public void CtrlStudentD(String[] data) {
-
-        for(var std : listStudent) {
-            if(std.getId().equals(data[1])){
-                if(std.getGpa() == 0) {
-                    CalculateGPA(data[1], listEnrollment);
-                    break;
-                }
-            }
-        }
+        
+        CalculateGPA(data[1], listEnrollment);
 
         for(var std : listStudent){
             if(std.getId().equals(data[1])){
@@ -128,7 +148,6 @@ public class Executor {
         }
 
     }
-
 
     public void CalculateGPA(String data, ArrayList<Enrollment> listEnr){
         double sumGrade = 0, result = 0, mulGpa = 0, tempGrade = 0;
@@ -209,13 +228,8 @@ public class Executor {
 
 // COURSE OPENING
     public void CtrlCourseO(String[] data) {
-        String init[] = data[4].split(",");
-        if(init.length == 1){
-            CourseOpening courseOpening = new CourseOpening(data[1], data[2], data[3], data[4]); 
-            listCourseOpening.add(courseOpening);
-        }
-
-        
+        CourseOpening courseOpening = new CourseOpening(data[1], data[2], data[3], data[4]); 
+        listCourseOpening.add(courseOpening);
     }
 
 
@@ -242,7 +256,6 @@ public class Executor {
 
             for(Enrollment enr : listEnrollment) {
                 if(enr.getCrsId().equals(crsOp.getId()) && enr.getYear().equals(crsOp.getYearOpen()) && enr.getTerm().equals(crsOp.getSemOpen())) {
-
                     if(enr.getRemedial() != null) {
                         System.out.println(enr.toStringDetail());
                     }else {
@@ -254,84 +267,8 @@ public class Executor {
         
     }
 
-// STUDENT TRANSCRIPT
-    public void CtrlStudentT(String[] data){
-        ArrayList<Enrollment> tempEnr = new ArrayList<Enrollment>();
 
-        for(var enr : listEnrollment){
-            if(enr.getStdId().equals(data[1])){
-                tempEnr.add(enr);
-            }
-        }
-
-        Collections.sort(tempEnr, Comparator
-            .comparing(Enrollment::getCrsId)
-            .thenComparing(Enrollment::getYear)
-            .reversed());
-
-        // Local Class
-        class SortingEnrollment {
-            private ArrayList<Enrollment> listEnrTranscript = new ArrayList<Enrollment>();
-
-            public SortingEnrollment() {
-                
-            }
-
-            public void addEnrTranscript(ArrayList<Enrollment> tempEnr){
-                String tempId = "";
-
-                for(var crs : listCourse){
-                    for(var enr : tempEnr){
-                        if(enr.getCrsId().equals(tempId))
-                            continue;
-                        
-                        if(enr.getStdId().equals(data[1]) && enr.getCrsId().equals(crs.getId())){
-                            listEnrTranscript.add(enr);
-                            tempId = crs.getId();
-                        }
-                    }
-                }
-
-                tempEnr.removeAll(tempEnr);
-                GPACalculation();
-            }
-
-            public void GPACalculation(){
-                for(var std : listStudent){
-                    if(std.getId().equals(data[1])){
-                        resetGPA(std);
-                        CalculateGPA(data[1], listEnrTranscript);
-                        System.out.println(std.toStringDetail());
-                    }
-                }
-
-                printEnrTranscript(listEnrTranscript);
-            }
-
-            public void printEnrTranscript(ArrayList<Enrollment> listET){
-                for(var enr : listET) {
-                    if(enr.getRemedial() != null) {
-                        System.out.println(enr.toStringDetail());
-                    }else{
-                        System.out.println(enr);
-                    }
-                }
-            }
-
-        }
-
-        SortingEnrollment sortEnr = new SortingEnrollment();
-        sortEnr.addEnrTranscript(tempEnr);
-        
-    }
-
-    public void resetGPA(Student std){
-        std.setGpa(0);
-        std.setSks(0);
-    }
-
-
-    // Print all ELement
+// PRINT DATA IN ELEMENT
     public void printElement() {
         Generic.printList(this.listLecturer);
         Generic.printList(this.listCourse);
