@@ -50,10 +50,10 @@ public class Driver1 {
                             ExeElement.CtrlCourseH(data);
                             break;
                         case "find-the-best-student":
-                            
+                            ExeElement.CtrlFindBest(data);
                             break;
                         case "add-best-student":
-
+                            ExeElement.CtrlAddBest(data);
                             break;
                         default:
                             System.out.println("Invalid input");

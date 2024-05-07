@@ -267,6 +267,19 @@ public class Executor {
         
     }
 
+// FIND BEST STUDENT
+    public void CtrlFindBest(String[] data) {
+
+    }
+
+// ADD BEST STUDENT
+    public void CtrlAddBest(String[] data) {
+        System.out.println("12S20002|B/A");
+        System.out.println("12S20002|B/A");
+
+    }
+
+
 
 // PRINT DATA IN ELEMENT
     public void printElement() {
