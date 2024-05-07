@@ -270,7 +270,13 @@ public class Executor {
 
 // FIND BEST STUDENT
     public void CtrlFindBest(String[] data) {
-        listBestStudent.add("12S20002|B/A");
+        
+        for(var enr : listEnrollment){
+            if(enr.getYear().equals(data[1]) && enr.getTerm().equals(data[2])){
+
+            }
+        }
+        
 
     }
 
