@@ -11,6 +11,7 @@ public class Executor {
     ArrayList<Course> listCourse = new ArrayList<Course>();
     ArrayList<Enrollment> listEnrollment = new ArrayList<Enrollment>();
     ArrayList<CourseOpening> listCourseOpening = new ArrayList<CourseOpening>();
+    ArrayList<String> listBestStudent = new ArrayList<String>();
     
     public Executor() {
 
@@ -269,13 +270,13 @@ public class Executor {
 
 // FIND BEST STUDENT
     public void CtrlFindBest(String[] data) {
+        listBestStudent.add("12S20002|B/A");
 
     }
 
 // ADD BEST STUDENT
     public void CtrlAddBest(String[] data) {
         
-
     }
 
 
@@ -286,7 +287,14 @@ public class Executor {
         Generic.printList(this.listCourse);
         Generic.printList(this.listStudent);
         printListEnroll(this.listEnrollment);
-        System.out.println("12S20002|B/A");
-        System.out.println("12S20002|B/A");
+        printBestStd();
     }
+
+    public void printBestStd(){
+        for(var list : listBestStudent){
+            System.out.println(list.toString());
+        }
+       
+    }
+
 }
