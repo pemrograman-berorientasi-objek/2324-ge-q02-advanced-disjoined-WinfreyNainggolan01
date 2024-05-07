@@ -293,7 +293,7 @@ public class Executor {
         Generic.printList(this.listCourse);
         Generic.printList(this.listStudent);
         printListEnroll(this.listEnrollment);
-        printBestStd();
+        // printBestStd();
     }
 
     public void printBestStd(){
