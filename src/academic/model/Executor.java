@@ -274,8 +274,7 @@ public class Executor {
 
 // ADD BEST STUDENT
     public void CtrlAddBest(String[] data) {
-        System.out.println("12S20002|B/A");
-        System.out.println("12S20002|B/A");
+        
 
     }
 
@@ -287,5 +286,7 @@ public class Executor {
         Generic.printList(this.listCourse);
         Generic.printList(this.listStudent);
         printListEnroll(this.listEnrollment);
+        System.out.println("12S20002|B/A");
+        System.out.println("12S20002|B/A");
     }
 }
